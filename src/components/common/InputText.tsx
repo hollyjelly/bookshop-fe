@@ -1,21 +1,22 @@
-import type {ForwardedRef} from "react";
+import React from "react";
 import {styled} from "styled-components";
 
-interface Props {
+interface Props extends React.InputHTMLAttributes<HTMLInputElement>{
     placeholder?: string;
+    inputType?: "email" | "text" | "password" | "number";
 }
 
-export default function InputText = React.forwardRef<HTMLInputElement, Props>(
-    ({ placeholder }, ref) => {
-        return <InputTextStyle placeholder={placeholder} ref={ref} />
+export default React.forwardRef<HTMLInputElement, Props>(
+    ({ placeholder, inputType, onChange, ...props}, ref) => {
+        return <InputTextStyle placeholder={placeholder} ref={ref} type={inputType} onChange={onChange}/>;
     }
-)
+);
 
-const InputTextStyle = styled.input.attrs({type: "text"})`
+const InputTextStyle = styled.input`
   padding: 0.25rem 0.75rem;
-  border: 1px solid ${({theme}) => theme.color.border}
-  border: ${({theme}) => theme.borderRadius.default}
+  border: 1px solid ${({theme}) => theme.colors.border};
+  border-radius: ${({theme}) => theme.borderRadius.default};
   font-size: 1rem;
   line-height: 1.5;
-  color: ${({theme}) => theme.color.text};
+  color: ${({theme}) => theme.colors.text};
 `

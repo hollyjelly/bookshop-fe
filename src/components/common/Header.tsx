@@ -1,44 +1,51 @@
 import {styled} from "styled-components"
 import logo from '../../assets/hero.png'
 import {FaRegUser, FaSignInAlt} from "react-icons/fa";
+import {Link} from "react-router-dom";
+import {useEffect, useState} from "react";
+import type {Category} from "../../models/category.model.ts";
+import {fetchCategory} from "../../api/category.api.ts";
+import {useCategory} from "../../hooks/useCategory.ts";
 
-const CATEGORY = [
-    {
-        id: null,
-        name: "전체",
-    },
-    {
-        id: 0,
-        name: "동화",
-    },
-    {
-        id: 1,
-        name: "소설",
-    },
-    {
-        id: 2,
-        name: "사회",
-    }
-]
+// const CATEGORY = [
+//     {
+//         id: null,
+//         name: "전체",
+//     },
+//     {
+//         id: 0,
+//         name: "동화",
+//     },
+//     {
+//         id: 1,
+//         name: "소설",
+//     },
+//     {
+//         id: 2,
+//         name: "사회",
+//     }
+// ]
 
 export default function Header() {
+    const {category} = useCategory();
+
     return (
         <HeaderStyle>
             <h1 className="logo">
-                <img src={logo} alt="vite"/>
+                <Link to="/"><img src={logo} alt="vite"/></Link>
             </h1>
             <nav className="category">
                 <ul>
-                    {CATEGORY.map((item) => (
-                        <li key={item.id}>
-                            <a href={item.id === null ? '/books' : `/books?category_id=${item.id}`}>
-                                {item.name}
+                    {category.map((item, index) => (
+                        <li key={index}>
+                            <a href={item.category_id === null ? '/books' : `/books?category_id=${item.category_id}`}>
+                                {item.category_name}
                             </a>
                         </li>
                     ))}
                 </ul>
             </nav>
-            <nav>
+            <nav className="auth">
                 <ul>
                     <li>
                         <a href="/login">
@@ -61,6 +68,7 @@ const HeaderStyle = styled.header`
   margin: 0 auto;
   max-width: ${({theme}) => theme.layout.width.large};
   display: flex;
+  justify-content: space-between;
   padding: 20px 0;
   border-bottom: 1px solid ${({theme}) => theme.colors.background};
   
