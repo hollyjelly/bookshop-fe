@@ -18,7 +18,7 @@ describe("Title 컴포넌트 테스트", () => {
         const ref = React.createRef<HTMLInputElement>()
         render(
             <BookStoreThemeProvider>
-                <InputText placholder="여기에 입력" ref={ref}/>
+                <InputText placho간lder="여기에 입력" ref={ref}/>
             </BookStoreThemeProvider>
         )
 

@@ -7,8 +7,8 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement>{
 }
 
 export default React.forwardRef<HTMLInputElement, Props>(
-    ({ placeholder, inputType, onChange, ...props}, ref) => {
-        return <InputTextStyle placeholder={placeholder} ref={ref} type={inputType} onChange={onChange}/>;
+    ({ placeholder, inputType, ...props}, ref) => {
+        return <InputTextStyle placeholder={placeholder} ref={ref} type={inputType} {...props}/>;
     }
 );
 

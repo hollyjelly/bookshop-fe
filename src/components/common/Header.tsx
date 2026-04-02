@@ -6,28 +6,13 @@ import {useEffect, useState} from "react";
 import type {Category} from "../../models/category.model.ts";
 import {fetchCategory} from "../../api/category.api.ts";
 import {useCategory} from "../../hooks/useCategory.ts";
+import {useAuthStore} from "../../store/authStore.ts";
 
-// const CATEGORY = [
-//     {
-//         id: null,
-//         name: "전체",
-//     },
-//     {
-//         id: 0,
-//         name: "동화",
-//     },
-//     {
-//         id: 1,
-//         name: "소설",
-//     },
-//     {
-//         id: 2,
-//         name: "사회",
-//     }
-// ]
 
 export default function Header() {
     const {category} = useCategory();
+    const {isLoggedIn, storeLogin, storeLogout} = useAuthStore()
+
 
     return (
         <HeaderStyle>
@@ -46,18 +31,31 @@ export default function Header() {
                 </ul>
             </nav>
             <nav className="auth">
-                <ul>
-                    <li>
-                        <a href="/login">
-                            <FaSignInAlt/>
-                            로그인</a>
-                    </li>
-                    <li>
-                        <a href="/login">
-                            <FaRegUser/>
-                            회원가입</a>
-                    </li>
-                </ul>
+                {
+                    isLoggedIn && (
+                        <ul>
+                            <li><Link to="/cart">장바구니</Link></li>
+                            <li><Link to="/orderlist">주문 내역</Link></li>
+                            <li><button onClick={storeLogout}>로그아웃</button></li>
+                        </ul>
+                    )
+                }
+                {
+                    !isLoggedIn && (
+                        <ul>
+                            <li>
+                                <a href="/login">
+                                    <FaSignInAlt/>
+                                    로그인</a>
+                            </li>
+                            <li>
+                                <a href="/login">
+                                    <FaRegUser/>
+                                    회원가입</a>
+                            </li>
+                        </ul>
+                    )
+                }
             </nav>
         </HeaderStyle>
     )
@@ -100,11 +98,14 @@ const HeaderStyle = styled.header`
       gap: 16px;
       
       li {
-        a {
+        a, button {
           font-size: 1rem;
           font-weight: 500;
           text-decoration: none;
           color: ${({theme}) => theme.colors.text};
+          background: none;
+          border: 0;
+          cursor: pointer;
           
           &:hover {
             color: ${({theme}) => theme.colors.primary};
