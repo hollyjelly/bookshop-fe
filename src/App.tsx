@@ -10,6 +10,7 @@ import Signup from "./pages/Signup.tsx";
 import ResetPassword from "./pages/ResetPassword.tsx";
 import Login from "./pages/Login.tsx";
 import Books from "./pages/Books.tsx";
+import BookDetail from "./components/books/BookDetail.tsx";
 
 const router = createBrowserRouter(
     [
@@ -33,6 +34,10 @@ const router = createBrowserRouter(
         {
             path: "/login",
             element: <Layout><Login/></Layout>
+        },
+        {
+            path: "/book/:bookId",
+            element: <Layout><BookDetail/></Layout>
         }
     ]
 )
