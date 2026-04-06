@@ -14,7 +14,7 @@ interface Props {
 export default function AddToCart ({ book }: Props) {
     const [quantity, setQuantity] = useState<number>(1)
     const [cartAdded, setCartAdded] = useState(false)
-    const showAlert = useAlert()
+    const {showAlert} = useAlert()
 
     const addToCart = (quantity: number) => {
         addCart({
@@ -49,7 +49,7 @@ export default function AddToCart ({ book }: Props) {
                 cartAdded && (
                     <div className="added">
                         <p>장바구니에 추가되었습니다.</p>
-                        <Link to="/cart">장바구니로 이동</Link>
+                        <Link to="/carts">장바구니로 이동</Link>
                     </div>
                 )
             }

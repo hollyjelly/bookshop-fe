@@ -11,6 +11,9 @@ import ResetPassword from "./pages/ResetPassword.tsx";
 import Login from "./pages/Login.tsx";
 import Books from "./pages/Books.tsx";
 import BookDetail from "./components/books/BookDetail.tsx";
+import Cart from "./pages/Cart.tsx";
+import Order from "./pages/Order.tsx";
+import OrderList from "./pages/OrderList.tsx";
 
 const router = createBrowserRouter(
     [
@@ -38,6 +41,30 @@ const router = createBrowserRouter(
         {
             path: "/book/:bookId",
             element: <Layout><BookDetail/></Layout>
+        },
+        {
+            path: "/carts",
+            element: (
+                <Layout>
+                    <Cart/>
+                </Layout>
+            )
+        },
+        {
+            path: "/order",
+            element: (
+                <Layout>
+                    <Order/>
+                </Layout>
+            )
+        },
+        {
+            path: "/orderlist",
+            element: (
+                <Layout>
+                    <OrderList/>
+                </Layout>
+            )
         }
     ]
 )
