@@ -11,10 +11,17 @@ export const createClient = (config?: AxiosRequestConfig) => {
         timeout: DEFAULT_TIMEOUT,
         headers: {
             "content-type": "application/json",
-            Authorization: getToken() ? getToken() : "",
         },
         withCredentials: true,
         ...config
+    })
+
+    axiosInstance.interceptors.request.use((config) => {
+        const token = getToken();
+        if (token) {
+            config.headers.Authorization = token;
+        }
+        return config;
     })
 
     axiosInstance.interceptors.response.use(
@@ -22,7 +29,7 @@ export const createClient = (config?: AxiosRequestConfig) => {
             return response
         },
     (error) => {
-            if (error.response.status === 400) {
+            if (error.response.status === 400 || error.response.status === 401) {
                 removeToken()
                 window.location.href = "/login"
                 return
@@ -36,3 +43,26 @@ export const createClient = (config?: AxiosRequestConfig) => {
 }
 
 export const httpClient = createClient()
+
+type RequestMethod = "get" | "post" | "put" | "delete"
+
+export const requestHandler = async<T> (method: RequestMethod, url: string, payload?: T) => {
+     let response;
+
+     switch (method) {
+         case "post":
+             response = await httpClient.post(url, payload)
+             break
+         case "get":
+             response = await httpClient.get(url)
+             break
+         case "put":
+             response = await httpClient.put(url, payload)
+             break
+         case "delete":
+             response = await httpClient.delete(url)
+             break
+     }
+
+     return response
+}

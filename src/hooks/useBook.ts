@@ -1,15 +1,20 @@
 import {useEffect, useState} from "react";
-import type {BookDetail} from "../models/book.model.ts";
+import type {BookDetail, BookReviewItem, BookReviewItemWrite} from "../models/book.model.ts";
 import {fetchBook, likeBook, unlikeBook} from "../api/books.api.ts";
 import {useAuthStore} from "../store/authStore.ts";
 import {useAlert} from "./useAlert.ts";
 import {addCart} from "../api/carts.api.ts";
+import {addBookReview, fetchBookReview} from "@/api/review.api.ts";
+import {useToast} from "@/hooks/useToast.ts";
 
 export const useBook = (bookId: string | undefined) => {
     const [book, setBook] = useState<BookDetail | null>(null)
     const [cartAdded, setCartAdded] = useState(false)
+    const [review, setReviews] = useState<BookReviewItem>([])
     const {isLoggedIn} = useAuthStore()
-    const showAlert = useAlert()
+    const {showAlert} = useAlert()
+    const {showToast} = useToast()
+
     const likeToggle = () => {
         if (!isLoggedIn) {
             showAlert('로그인이 필요합니다.')
@@ -28,6 +33,7 @@ export const useBook = (bookId: string | undefined) => {
                     }
                 )
             })
+            showToast("좋아요가 취소되었습니다.")
         }
         else {
             likeBook(book.id).then(() => {
@@ -37,6 +43,7 @@ export const useBook = (bookId: string | undefined) => {
                     likes: book.likes + 1
                 })
             })
+            showToast("좋아요가 성공했습니다.")
         }
     }
 
@@ -60,7 +67,21 @@ export const useBook = (bookId: string | undefined) => {
         fetchBook(bookId).then((book) => {
             setBook(book)
         })
+
+        fetchBookReview(bookId).then((reviews) => {
+            setReviews(reviews)
+        })
     }, [bookId]);
 
-    return {book, likeToggle, addToCart}
+    const addReview = (data: BookReviewItemWrite) => {
+        if (!book) return
+
+        addBookReview(book.id.toString(), data).then((res) => {
+            fetchBookReview(book.id.toString()).then((reviews) => {
+                setReviews(reviews)
+            })
+        })
+    }
+
+    return {book, likeToggle, addToCart, cartAdded, review, addReview}
 }

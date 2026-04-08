@@ -9,30 +9,21 @@ import {login, signup} from "../api/auth.api.ts";
 import {useAlert} from "../hooks/useAlert.ts";
 import {SignupStyle} from "./Signup.tsx";
 import {useAuthStore} from "../store/authStore.ts";
+import {useAuth} from "@/hooks/useAuth.ts";
 
-export interface SignupProps {
+export interface LoginProps {
     email: string;
     password: string;
 }
 
 export default function Login() {
-    const navigate = useNavigate()
-    const {register, handleSubmit, formState: {errors}} = useForm<SignupProps>()
-    const {showAlert} = useAlert()
+    const {register, handleSubmit, formState: {errors}} = useForm<LoginProps>()
+    const {userLogin} = useAuth()
 
     const {isLoggedIn, storeLogin, storeLogout} = useAuthStore()
 
-    const onSubmit = (data: SignupProps) => {
-        login(data).then((res) => {
-
-            storeLogin(res.token);
-
-            showAlert("로그인이 완료되었습니다.")
-            navigate("/")
-        }, (error) => {
-            showAlert("로그인이 실패했습니다.")
-            }
-        )
+    const onSubmit = (data: LoginProps) => {
+        userLogin(data)
     }
 
     return(

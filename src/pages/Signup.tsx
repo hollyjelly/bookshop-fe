@@ -7,6 +7,7 @@ import React, {useState} from "react";
 import {useForm} from "react-hook-form";
 import {signup} from "../api/auth.api.ts";
 import {useAlert} from "../hooks/useAlert.ts";
+import {useAuth} from "@/hooks/useAuth.ts";
 
 export interface SignupProps {
     email: string;
@@ -14,15 +15,11 @@ export interface SignupProps {
 }
 
 export default function Signup() {
-    const navigate = useNavigate()
     const {register, handleSubmit, formState: {errors}} = useForm<SignupProps>()
-    const {showAlert} = useAlert()
+    const {userSignup} = useAuth()
 
     const onSubmit = (data: SignupProps) => {
-        signup(data).then((res) => {
-            showAlert("회원가입이 완료되었습니다.")
-            navigate("/login")
-        })
+        userSignup(data)
     }
 
     return(
