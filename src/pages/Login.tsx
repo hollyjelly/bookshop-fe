@@ -1,12 +1,9 @@
-import {styled} from "styled-components";
 import Title from "../components/common/Title.tsx";
 import InputText from "../components/common/InputText.tsx";
 import Button from "../components/common/Button.tsx";
 import {Link, useNavigate} from "react-router-dom";
 import React, {useState} from "react";
 import {useForm} from "react-hook-form";
-import {login, signup} from "../api/auth.api.ts";
-import {useAlert} from "../hooks/useAlert.ts";
 import {SignupStyle} from "./Signup.tsx";
 import {useAuthStore} from "../store/authStore.ts";
 import {useAuth} from "@/hooks/useAuth.ts";
@@ -36,6 +33,7 @@ export default function Login() {
                             placeholder="이메일"
                             inputType="email"
                             {...register("email", {required: true})}
+                            inputMode="email"
                         />
                         {errors.email && <p className="error-text">
                             이메일을 입력해주세요.
@@ -46,6 +44,7 @@ export default function Login() {
                             placeholder="패스워드"
                             inputType="password"
                             {...register("password", {required: true})}
+                            inputMode="text"
                         />
                         {errors.password && <p className="error-text">
                             비밀번호를 입력해주세요.

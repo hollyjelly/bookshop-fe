@@ -36,4 +36,9 @@ const FooterStyle = styled.footer`
       color: ${({theme}) => theme.colors.text};
     }
   }
+
+  @media screen AND ${({ theme }) => theme.mediaQuery.mobile} {
+    flex-direction: column;
+    align-items: center;
+  }
 `

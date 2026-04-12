@@ -1,24 +1,28 @@
 import {styled} from "styled-components"
 import logo from '../../assets/hero.png'
-import {FaRegUser, FaSignInAlt, FaUserCircle} from "react-icons/fa";
+import {FaAngleRight, FaBars, FaRegUser, FaSignInAlt, FaUserCircle} from "react-icons/fa";
 import {Link} from "react-router-dom";
 import {useCategory} from "../../hooks/useCategory.ts";
 import {useAuthStore} from "../../store/authStore.ts";
 import Dropdown from "@/components/common/Dropdown.tsx";
 import ThemeSwitcher from "@/components/header/ThemeSwitcher.tsx";
+import {useState} from "react";
 
 
 export default function Header() {
     const {category} = useCategory();
     const {isLoggedIn, storeLogin, storeLogout} = useAuthStore()
-
+    const {isMobileOpen, setIsMobileOpen} = useState(false)
 
     return (
-        <HeaderStyle>
+        <HeaderStyle $isOpen={isMobileOpen}>
             <h1 className="logo">
                 <Link to="/"><img src={logo} alt="vite"/></Link>
             </h1>
             <nav className="category">
+                <button className="menu-button" onClick={() => {setIsMobileOpen(!isMobileOpen)}}>
+                    {isMobileOpen ? <FaAngleRight/> : <FaBars/>}
+                </button>
                 <ul>
                     {category.map((item, index) => (
                         <li key={index}>
@@ -65,7 +69,11 @@ export default function Header() {
     )
 }
 
-const HeaderStyle = styled.header`
+interface HeaderStyleProps {
+    $isOpen: boolean
+}
+
+const HeaderStyle = styled.header<HeaderStyleProps>`
     width: 100%;
   margin: 0 auto;
   max-width: ${({theme}) => theme.layout.width.large};
@@ -81,6 +89,10 @@ const HeaderStyle = styled.header`
   }
   
   .category {
+    .menu-button {
+      display: none;
+    }
+    
     ul {
       display: flex;
       gap: 32px;
@@ -119,6 +131,52 @@ const HeaderStyle = styled.header`
             color: ${({theme}) => theme.colors.primary};
           }
         }
+      }
+    }
+  }
+
+  @media screen AND ${({ theme }) => theme.mediaQuery.mobile} {
+    height: 52px;
+
+    .logo {
+      padding: 0 0 0 12px;
+
+      img {
+        width: 140px;
+      }
+    }
+
+    .auth {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+    }
+
+    .category {
+      .menu-button {
+        display: flex;
+        position: absolute;
+        top: 12px;
+        right: ${({$isOpen}) => $isOpen ? "62%" : "52px"};
+        background: #fff;
+        border: 0;
+        font-size: 1.5rem;
+      }
+      
+      ul {
+        position: fixed;
+        top: 0;
+        right: ${({$isOpen}) => $isOpen ? "0" : "-100%"};
+        width: 60%;
+        height: 100vh;
+        background: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        margin: 0;
+        padding: 24px;
+        z-index: 1000;
+        flex-direction: column;
+        gap: 16px;
+        transition: right 0.3s ease-in-out;
       }
     }
   }

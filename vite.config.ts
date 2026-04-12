@@ -10,6 +10,9 @@ export default defineConfig({
       '@': resolve(__dirname, 'src'),
     },
   },
+  optimizeDeps: {
+    include: ['react-slick'],
+  },
   test: {
     globals: true,
     environment: 'jsdom',
